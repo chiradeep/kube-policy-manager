@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: NetworkPolicy
+metadata:
+ name: test-udp
+ namespace: policytest
+spec:
+ podSelector:
+  matchLabels:
+    tier: backend
+ ingress:
+  - from:
+     - podSelector:
+        matchLabels:
+            tier: frontend
+            tier: backend
+    ports:
+     - protocol: udp
+       port: 512

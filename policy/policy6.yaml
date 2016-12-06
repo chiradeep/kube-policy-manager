@@ -1,0 +1,13 @@
+apiVersion: extensions/v1beta1
+kind: NetworkPolicy
+metadata:
+ name: guestbook-network-policy6
+ namespace: policytest
+spec:
+ podSelector:
+  matchLabels:
+    tier: backend
+ ingress:
+  - from:
+    ports:
+     

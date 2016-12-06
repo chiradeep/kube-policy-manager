@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: NetworkPolicy
+metadata:
+ name: guestbook-network-policy4
+ namespace: policytest
+spec:
+ podSelector:
+ ingress:
+  - from:
+     - podSelector:
+        matchLabels:
+            tier: frontend
+    ports:
+     - port: 3345

@@ -1,0 +1,14 @@
+apiVersion: extensions/v1beta1
+kind: NetworkPolicy
+metadata:
+ name: guestbook-allow-frontend
+ namespace: policytest
+spec:
+ podSelector:
+  matchLabels:
+    tier: frontend
+ ingress:
+  - from:
+    ports:
+     - protocol: tcp
+       port: 80
