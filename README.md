@@ -28,8 +28,11 @@ Enforces ingress network policy using iptables. The controller is run on each No
   1. running a kubectl proxy : `kubectl proxy --api-prefix=/`
   2. running `sudo NODE_NAME=<some node name> make run`
 
+## TODO
+1. Use [IPSet] (http://ipset.netfilter.org/) instead of multiple iptables rules to match source ip of packets
+2. Ports in the Ingress policy can be names: handle this (assumes Integer right now)
+3. Delete rules that are obsoleted by changes to policies/pods selectively instead of flushing the IPtables chain. This should automatically be the case if IPSets are used
+4. According to the NetworkPolicy documentation, ("DefaultDeny: Pods in the namespace will be inaccessible from any source except the pod’s local node.
+") ingress rules do not apply to traffic originating from the same host. Not sure why this should be the case. This controller will block traffic even originating on the same host if it does not match any rule.
 
-## Author
-
-[chiradeep](https://github.com/chiradeep)
 
