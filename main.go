@@ -37,7 +37,6 @@ import (
 )
 
 var (
-	// value overwritten during build. This can be used to resolve issues.
 	flags = pflag.NewFlagSet("", pflag.ExitOnError)
 
 	resyncPeriod = flags.Duration("sync-period", 30*time.Second,

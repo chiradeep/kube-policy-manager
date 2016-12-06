@@ -99,7 +99,7 @@ func newNetworkPolicyController(kubeClient client.Interface, nodeName, namespace
 		}
 	}
 	if npc.myNodeIP == "" {
-		glog.Infof("Failed to determine my node IP")
+		glog.Fatal("Failed to determine my node IP")
 	}
 	glog.Infof("Determined my node IP to be %s", npc.myNodeIP)
 
@@ -447,6 +447,7 @@ func (npc *networkPolicyController) sync(obj interface{}) error {
 							}
 						}
 					}
+					//TODO: use ipsets to scale this properly
 					for _, peer := range ingress.From {
 						peerSelector, _ := unversioned.LabelSelectorAsSelector(peer.PodSelector)
 						peerPodsAllowed, _ := npc.podLister.List(peerSelector)
@@ -490,9 +491,9 @@ func (npc *networkPolicyController) sync(obj interface{}) error {
 	return errorEncountered
 }
 
-// podNameHash takes the name of a pod/policy
+// nameHash takes the name of a pod/policy
 // returns the associated 6 character hash. This is computed by hashing (sha256)
-// then encoding to base32 and truncating to 16 chars. We do this because IPTables
+// then encoding to base32 and truncating to 6 chars. We do this because IPTables
 // Chain Names must be <= 28 chars long, and the longer they are the harder they are to read.
 func nameHash(name string) string {
 	hash := sha256.Sum256([]byte(name))
