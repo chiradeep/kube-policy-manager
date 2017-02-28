@@ -227,7 +227,7 @@ func (npc *networkPolicyController) createDefaultRejectForPodsInNamespace(namesp
 			}
 			chains[podChain] = true
 			comment := "network policy chain for POD " + pod.ObjectMeta.Name
-			args := []string{"-m", "comment", "--comment", comment, "-d", pod.Status.PodIP, "-j", string(podChain)}
+			args := []string{"-m", "physdev", "--physdev-is-bridged", "-m", "comment", "--comment", comment, "-d", pod.Status.PodIP, "-j", string(podChain)}
 			_, err = npc.iptables.EnsureRule(utiliptables.Prepend, utiliptables.TableFilter, "FORWARD", args...)
 			if err != nil {
 				glog.Infof("Error ensuring policy rule %v", args)
@@ -385,7 +385,7 @@ func (npc *networkPolicyController) sync(obj interface{}) error {
 				//The last rule in KUBE-NWPLCY-podnamehash should be a REJECT (or DROP)
 				//iptables -A KUBE-NWPLCY-podnamehash -j REJECT
 				//E.g.,
-				//-A FORWARD -d 10.244.5.4/32 -m comment --comment "nw policy chain for POD redis-slave-132015689-fksjt" -j KUBE-NWPLCY-7UYHFX
+				//-A FORWARD -d 10.244.5.4/32 -m physdev --physdev-is-bridged -m comment --comment "nw policy chain for POD redis-slave-132015689-fksjt" -j KUBE-NWPLCY-7UYHFX
 				//-A KUBE-NWPLCY-7UYHFX -m comment --comment "network policy rule for pod redis-slave-132015689-fksjt;policy: guestbook-network-policy" -j KUBE-NWPLCY-7UYHFX-SYJW74
 				//-A KUBE-NWPLCY-7UYHFX -m comment --comment "final rule in network policy chain for POD redis-slave-132015689-fksjt" -j REJECT
 				//-A KUBE-NWPLCY-7UYHFX-SYJW74 -s 10.244.3.4/32 -p tcp -m tcp --dport 6379 -m comment --comment "nw policy rule for peer POD frontend-88237173-zir4y" -j ACCEPT

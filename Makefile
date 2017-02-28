@@ -2,7 +2,7 @@
 all: controller
 
 # 0.0 shouldn't clobber any release builds
-TAG = 0.0
+TAG = 0.1
 PREFIX = chiradeep/kube-policy-manager
 
 controller_linux: controller.go main.go
@@ -12,7 +12,7 @@ controller: controller.go utils.go main.go
 	go build  -o kube-policy-manager
 
 container: controller_linux
-	docker build -t $(PREFIX):$(TAG) .
+	sudo docker build -t $(PREFIX):$(TAG) .
 
 #push: container
 #	gcloud docker push $(PREFIX):$(TAG)
