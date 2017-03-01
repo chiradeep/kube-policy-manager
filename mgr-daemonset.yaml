@@ -13,7 +13,7 @@ spec:
       hostNetwork: true
       containers:
       - name: kube-policy-manager
-        image: chiradeep/kube-policy-manager:0.1
+        image: chiradeep/kube-policy-manager:0.22
         args: ["--logtostderr=1", "--v=4"]
         securityContext:
          privileged: true

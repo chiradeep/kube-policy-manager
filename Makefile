@@ -2,7 +2,7 @@
 all: controller
 
 # 0.0 shouldn't clobber any release builds
-TAG = 0.1
+TAG = 0.22
 PREFIX = chiradeep/kube-policy-manager
 
 controller_linux: controller.go main.go

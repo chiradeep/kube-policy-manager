@@ -156,7 +156,12 @@ func (npc *networkPolicyController) establishStatefulFirewall() error {
 	//-I FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
 	comment := "NW Policy requires stateful firewall"
 	args := []string{"-m", "comment", "--comment", comment, "-m", "state", "--state", "RELATED,ESTABLISHED", "-j", "ACCEPT"}
-	_, err := npc.iptables.EnsureRule(utiliptables.Prepend, utiliptables.TableFilter, "FORWARD", args...)
+	//we need to delete first otherwise if the rule exists then the following will not insert it. The rule then may not be the first rule anymore
+	err := npc.iptables.DeleteRule(utiliptables.TableFilter, "FORWARD", args...)
+	for i := 0; i < 2; i++ { //there is no other way to delete all the matching rules, assume there's not more than 3 of them
+	    err = npc.iptables.DeleteRule(utiliptables.TableFilter, "FORWARD", args...)
+	}
+	_, err = npc.iptables.EnsureRule(utiliptables.Prepend, utiliptables.TableFilter, "FORWARD", args...)
 	return err
 }
 
